@@ -1,0 +1,19 @@
+{
+    "permissions": {
+        "allow": [
+            "Read",
+            "Edit",
+            "Bash(git status)",
+            "Bash(git diff)",
+            "Bash(git add)",
+            "Bash(git commit)",
+            "Bash(git push)",
+            "Bash(npm install)",
+            "Bash(npm ci)",
+            "Bash(npx playwright test)",
+            "Bash(npx playwright test --update-snapshots)",
+            "Bash(docker compose run)",
+            "Bash(docker build)"
+        ]
+    }
+}
