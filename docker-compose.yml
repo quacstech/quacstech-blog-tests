@@ -1,0 +1,10 @@
+services:
+  playwright:
+    build: .
+    volumes:
+      - ./tests:/app/tests
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+    environment:
+      - BASE_URL=${BASE_URL}
+    shm_size: 2gb

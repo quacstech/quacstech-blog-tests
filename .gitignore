@@ -1,0 +1,10 @@
+# Environment
+.env
+
+# Playwright
+test-results/
+playwright-report/
+node_modules/
+
+# Mac
+.DS_Store
