@@ -1,23 +1,23 @@
 ---
 description: Generate a visual regression test with screenshot assertion for a page
-argument-hint: [page-name, e.g. homepage | inventory | cart]
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash(npx playwright test:*), Bash(npx tsc:*)
+argument-hint: [page-name, e.g. homepage | post | archive]
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash(npx tsc:*)
 ---
 
-Generate a visual regression test for the **$ARGUMENTS** page of saucedemo.com.
+Generate a visual regression test for the **$ARGUMENTS** page of the quacs.tech Hugo blog.
 
 ## Process
 
-1. Read `CLAUDE.md`, `playwright.config.ts`, and existing page objects/fixtures to reuse navigation and login flows — do not reimplement them.
-2. Create (or extend) `tests/specs/visual/$ARGUMENTS.visual.spec.ts`:
-   - Navigate to the $ARGUMENTS page via existing POM methods, logging in through the existing auth fixture if the page requires it.
+1. Read `CLAUDE.md`, `playwright.config.ts`, and existing page objects/fixtures to reuse navigation — do not reimplement it. This is a public site with no login/auth flow.
+2. Add a test to `tests/specs/visual.spec.ts` (create it if it doesn't exist yet — this file is the single home for all visual tests, matched by the `visual` project in `playwright.config.ts`):
+   - Navigate to the $ARGUMENTS page via an existing POM method from `tests/pages/` (add one if missing).
    - Wait for the page to be fully ready using web-first assertions on key elements — never `waitForTimeout`.
    - Assert with `await expect(page).toHaveScreenshot('$ARGUMENTS.png', { ... })`:
      - Set `fullPage: true` unless the page has infinite/lazy content.
-     - `mask` any dynamic elements (timestamps, cart badges with variable counts, animations) to prevent flaky diffs.
-     - Set a sensible `maxDiffPixelRatio` (e.g. 0.01) rather than demanding pixel-perfect equality.
+     - `mask` any dynamic elements (timestamps, ai-digest content, animations) to prevent flaky diffs.
      - Disable animations via `animations: 'disabled'`.
-   - Tag the test `@visual` so it can be included/excluded via `--grep`.
-3. Check `playwright.config.ts` for a `snapshotPathTemplate` / `expect.toHaveScreenshot` config block; if missing, propose the addition and explain that baselines are platform-specific (a macOS baseline will fail on the Linux CI runner — baselines for CI should be generated with `--update-snapshots` on the CI platform or via Docker).
-4. Verify: run `npx tsc --noEmit`, then run the test once with `--update-snapshots` to generate the baseline, then run it again without the flag to confirm it passes against the baseline.
-5. Summarize: files created, baseline location, masked elements and why, and any config changes needed for CI.
+     - Do not override `maxDiffPixels`/`threshold` per-call — rely on the project-wide values in `playwright.config.ts` (100 / 0.2 per CLAUDE.md) unless this page has a documented reason to differ.
+   - Tag the test `@visual`.
+3. Remind the user of CLAUDE.md's rule: visual tests run in Docker only, for consistent rendering across environments. Baselines must be generated/updated via `npm run test:visual` (`docker compose run --rm playwright ...`) — never with a locally-installed browser — and committed to `tests/specs/snapshots/` immediately after updating.
+4. Verify: run `npx tsc --noEmit` only. Do NOT run the visual test locally to generate baselines — a macOS-generated baseline will fail on the Linux/Docker runner. Tell the user to run `npm run test:visual` (with `--update-snapshots` first to create the baseline, then without to confirm it passes) inside Docker.
+5. Summarize: test added, baseline expected at `tests/specs/snapshots/`, masked elements and why, and the Docker command needed to generate the baseline.
