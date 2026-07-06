@@ -1,0 +1,5 @@
+node_modules/
+test-results/
+playwright-report/
+tests/specs/snapshots/
+package-lock.json

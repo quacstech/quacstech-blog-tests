@@ -1,0 +1,30 @@
+{
+  "name": "quacstech-blog-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Regression + visual test suite for the quacs.tech Hugo blog",
+  "type": "commonjs",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:visual": "docker compose run --rm playwright npx playwright test --project=visual",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "lint": "eslint .",
+    "format": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@playwright/test": "1.44.0",
+    "@types/node": "^20.14.15",
+    "dotenv": "^16.4.5",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^1.6.2",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.0"
+  }
+}
