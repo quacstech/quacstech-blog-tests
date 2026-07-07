@@ -26,3 +26,11 @@ Feature: Smoke test — critical path for the quacs.tech blog
     When a visitor navigates to the homepage
     Then no server error or blank page is shown
     And the footer is visible, confirming the full page rendered
+
+  @smoke
+  Scenario: All menu links are clickable
+    Given the visitor is on the homepage
+    Then each link in the top menu bar is visible
+    And each link in the top menu bar is enabled and clickable
+    And each link in the left-side menu is visible
+    And each link in the left-side menu is enabled and clickable
